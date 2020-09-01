@@ -73,7 +73,7 @@ const userController = {
                 response.send(200, user);
             }
             else{
-                response.send(400, { error: "Bad request: name and phone required" });
+                response.send(400, { error: "Bad request: missing information" });
             }
         }
         else{
@@ -88,13 +88,17 @@ const userController = {
         const user = users.find( user => user.id === Number(id) );
 
         if(user){
-            if(body.name || body.phone){
-                body.name ? user.name = body.name : null;
-                body.phone ? user.phone = body.phone : null;
+            if(Object.keys(body).length > 0){
+                for (const key in body) {
+                    if(user[key]){
+                        user[key] = body[key];
+                    }
+                }
+                
                 response.send(200, user);
             }
             else{
-                response.send(400, { error: "Bad request: name or phone required" });
+                response.send(400, { error: "Bad request: missing information" });
             }
         }
         else{
