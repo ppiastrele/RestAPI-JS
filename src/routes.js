@@ -23,6 +23,11 @@ const routes = [
     },
     {
         endpoint: "/users/:id",
+        method: "PATCH",
+        handler: userController.patchUser,
+    },
+    {
+        endpoint: "/users/:id",
         method: "DELETE",
         handler: userController.deleteUser,
     },

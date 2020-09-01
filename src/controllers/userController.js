@@ -1,4 +1,6 @@
-const users = require("../mocks/users.js");
+"use strict"
+
+let users = require("../mocks/users.js");
 
 const userController = {
 
@@ -39,11 +41,14 @@ const userController = {
     createUser(request, response){
         const { body } = request;
         
-        if(body.name){
-            const lastUser = users[users.length-1].id;
+        if(body.name && body.phone){
+            const ids = users.map( user => user.id );
+            const lastId = Math.max(...ids);
+            
             const newUser = {
-                id: lastUser + 1,
+                id: lastId + 1,
                 name: body.name,
+                phone: body.phone,
             };
 
             users.push(newUser);
@@ -51,7 +56,7 @@ const userController = {
             response.send(200, newUser);
         }
         else{
-            response.send(400, { error: "Bad request: no name property identified" });
+            response.send(400, { error: "Bad request: name and phone required" });
         }
     },
 
@@ -62,8 +67,35 @@ const userController = {
         const user = users.find( user => user.id === Number(id) );
 
         if(user){
-            user.name = body.name;
-            response.send(200, user);
+            if(body.name && body.phone){
+                user.name = body.name;
+                user.phone = body.phone;
+                response.send(200, user);
+            }
+            else{
+                response.send(400, { error: "Bad request: name and phone required" });
+            }
+        }
+        else{
+            response.send(400, { error: "User not found" });
+        }
+    },
+
+    patchUser(request, response){
+        const { id } = request.params;
+        const { body } = request;
+        
+        const user = users.find( user => user.id === Number(id) );
+
+        if(user){
+            if(body.name || body.phone){
+                body.name ? user.name = body.name : null;
+                body.phone ? user.phone = body.phone : null;
+                response.send(200, user);
+            }
+            else{
+                response.send(400, { error: "Bad request: name or phone required" });
+            }
         }
         else{
             response.send(400, { error: "User not found" });

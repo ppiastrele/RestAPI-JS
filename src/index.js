@@ -48,7 +48,14 @@ const server = http.createServer((request, response) => {
     }
     else if(pathname === "/"){
         response.writeHead(404, { "Content-type": "text/html" });
-        response.end(`<h3>First API : ppiastrele</h3>`);
+        response.end(`<h3>Rest API : ppiastrele</h3>
+        <p>GET /users -> get all users</p>
+        <p>GET /users/2 -> get user with id 2</p>
+        <p>POST /users -> post new user (require name and phone properties)</p>
+        <p>PUT /users/2 -> update all informations of user 2 (require name and phone properties)</p>
+        <p>PATCH /users/2 -> update user 2 name or phone (require updatable property)</p>
+        <p>DELETE /users/2 -> delete user 2</p>
+        `);
     }
     else{
         response.writeHead(404, { "Content-type": "application/JSON" });

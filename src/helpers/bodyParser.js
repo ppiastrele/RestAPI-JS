@@ -10,7 +10,6 @@ function bodyParser(request, response, callback){
     request.on("end", () => {
         //catch any parse error
         try{
-            console.log(body);
             body = JSON.parse(body);
             request.body = body;
             
