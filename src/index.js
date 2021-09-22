@@ -1,7 +1,7 @@
 "use strict"
 
 const http = require("http");
-const url = require("url");
+const { URL } = require("url");
 
 const bodyParser = require("./helpers/bodyParser.js");
 const routes = require("./routes.js");
@@ -9,8 +9,8 @@ const routes = require("./routes.js");
 //create server
 const server = http.createServer((request, response) => {
     //parse request url to object for better use
-    const parsedUrl = url.parse(request.url, true);
-    
+    const parsedUrl = new URL(`http://${request.headers.host}${request.url}`);
+
     console.log(`Request method: ${request.method} | Endpoint ${request.url}`);
 
     let { pathname } = parsedUrl;
@@ -29,7 +29,8 @@ const server = http.createServer((request, response) => {
     ));
     
     if(route){
-        request.query = parsedUrl.query;
+        //convert Iterable .searchParams from URL class to an usable ibject
+        request.query = Object.fromEntries(parsedUrl.searchParams);
         request.params = { id: id, };
 
         //set .send to simplify responses
@@ -48,7 +49,8 @@ const server = http.createServer((request, response) => {
     }
     else if(pathname === "/"){
         response.writeHead(404, { "Content-type": "text/html" });
-        response.end(`<h3>Rest API : ppiastrele</h3>
+        response.end(`
+        <h3>Rest API : ppiastrele</h3>
         <p>GET /users -> get all users</p>
         <p>GET /users/2 -> get user with id 2</p>
         <p>POST /users -> post new user (require name and phone properties)</p>
