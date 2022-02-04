@@ -1,6 +1,6 @@
 "use strict"
 
-let users = require("../mocks/users.js");
+const users = require("../mocks/users.js");
 
 const userController = {
 

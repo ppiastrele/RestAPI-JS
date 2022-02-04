@@ -18,6 +18,7 @@ const server = http.createServer((request, response) => {
 
     const splitEndpoint = pathname.split("/").filter(Boolean);
 
+    //separate id from end point
     if(splitEndpoint.length > 1){
         pathname = `/${splitEndpoint[0]}/:id`;
         id = splitEndpoint[1];
