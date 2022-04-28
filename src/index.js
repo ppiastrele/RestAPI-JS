@@ -30,7 +30,7 @@ const server = http.createServer((request, response) => {
     ));
     
     if(route){
-        //convert Iterable .searchParams from URL class to an usable ibject
+        //convert Iterable .searchParams from URL class to an usable object
         request.query = Object.fromEntries(parsedUrl.searchParams);
         request.params = { id: id, };
 
